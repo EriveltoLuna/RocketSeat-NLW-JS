@@ -1,9 +1,9 @@
 const { select, input, checkbox } = require("@inquirer/prompts");
-
+let listChanged = false;
 let goals = [
-  // { value: "teste1", checked: false },
-  // { value: "teste2", checked: false },
-  // { value: "teste3", checked: false },
+  { value: "teste1", checked: false },
+  { value: "teste2", checked: false },
+  { value: "teste3", checked: false },
 ];
 
 const addGoal = async () => {
@@ -32,25 +32,30 @@ const listedGoals = async () => {
     instructions: false,
   });
 
-  // if (listedGoal.length === 0) {
-  //   console.log("No goals selected!");
-  //   return;
-  // }
-
   goals.forEach((g) => {
     g.checked = false;
   });
 
-  listedGoal.forEach((listedGoal) => {
+  const gs = listedGoal.map((listedGoal) => {
     const goal = goals.find((g) => {
-      return g.value === listedGoal;
+      if (g.value === listedGoal) {
+        listChanged = true;
+        return g;
+      } else {
+        listChanged = false;
+      }
     });
     goal.checked = true;
   });
 
-  console.log("Checked goal(s) finished!");
-};
+  const checkedGoals = goals.filter((goal) => goal.checked === true);
 
+  if (checkedGoals.length === 0 || !listChanged) {
+    return console.log("No goals selected!");
+  } else {
+    console.log("Checked goal(s) finished!");
+  }
+};
 const start = async () => {
   while (true) {
     const option = await select({
@@ -74,12 +79,12 @@ const start = async () => {
     switch (option) {
       case "add":
         await addGoal();
-        console.log(goals);
+        // console.log(goals); teste
         break;
 
       case "list":
         await listedGoals();
-        console.log(goals);
+        // console.log(goals); teste
         break;
 
       case "exit":
