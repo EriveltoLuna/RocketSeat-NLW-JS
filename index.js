@@ -36,7 +36,7 @@ const listedGoals = async () => {
     g.checked = false;
   });
 
-  const gs = listedGoal.map((listedGoal) => {
+  listedGoal.forEach((listedGoal) => {
     const goal = goals.find((g) => {
       if (g.value === listedGoal) {
         listChanged = true;
